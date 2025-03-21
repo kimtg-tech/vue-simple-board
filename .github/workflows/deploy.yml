@@ -36,7 +36,9 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            rm -rf /var/www/vue-simple-board/*
+            sudo rm -rf /var/www/vue-simple-board/*
+            sudo mkdir -p /var/www/vue-simple-board
+            sudo chown -R $USER:$USER /var/www/vue-simple-board
             rsync -avz dist/ /var/www/vue-simple-board/
       - name: Debug SSH Connection
         run: ssh -vvv -i ~/.ssh/id_rsa -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} exit
