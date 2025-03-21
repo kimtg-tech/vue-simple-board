@@ -1,4 +1,5 @@
 # vue-simple-board
+front 부분의 crud 및 로그인 인증 작업중
 
 This template should help get you started developing with Vue 3 in Vite.
 
