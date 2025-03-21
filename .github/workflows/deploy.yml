@@ -18,7 +18,15 @@ jobs:
         run: npm install
 
       - name: Build Vue app
-        run: npm run build
+        run: |
+          npm run build
+          ls -al dist
+
+      - name: Cache build files
+        uses: actions/cache@v3
+        with:
+          path: dist
+          key: vue-build-${{ github.sha }}
 
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.10
@@ -29,7 +37,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             rm -rf /var/www/vue-simple-board/*
-            cp -r dist/* /var/www/vue-simple-board/
+            rsync -avz dist/ /var/www/vue-simple-board/
       - name: Debug SSH Connection
         run: ssh -vvv -i ~/.ssh/id_rsa -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} exit
       
