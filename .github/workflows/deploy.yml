@@ -26,6 +26,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}          
           key: ${{ secrets.SERVER_KEY }}
+          key_path: /tmp/id_rsa
           port: ${{ secrets.SERVER_PORT }}
           script: |
             rm -rf /var/www/vue-simple-board/*
