@@ -20,6 +20,13 @@ jobs:
       - name: Build Vue app
         run: npm run build
 
+      - name: Check if dist folder exists
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "Error: dist folder not found!";
+            exit 1;
+          fi
+
       - name: Compress build files
         run: tar -czvf /tmp/vue-app.tar.gz dist/
 
