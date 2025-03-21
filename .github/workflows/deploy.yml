@@ -21,7 +21,7 @@ jobs:
         run: npm run build
 
       - name: Deploy to server
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}          
@@ -30,3 +30,6 @@ jobs:
           script: |
             rm -rf /var/www/vue-simple-board/*
             cp -r dist/* /var/www/vue-simple-board/
+      - name: Debug SSH Connection
+        run: ssh -vvv -i ~/.ssh/id_rsa -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} exit
+      
