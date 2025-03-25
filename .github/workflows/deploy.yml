@@ -14,23 +14,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Sync source code to server
-        uses: appleboy/rsync-action@latest # 또는 최신 버전 번호
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_KEY }}
-          port: ${{ secrets.SERVER_PORT }}
-          source: ./
-          target: /home/kimtg-proejct/${{ github.event.repository.name }}
-          delete: true
-          args: -avz
-      - name: Sync source code to server
+      - name: Archive source code
+        run: git archive --format=tar.gz --output=app.tar.gz main
+
+      - name: Copy source code to server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_KEY }}
-          port: ${{ secrets.SERVER_PORT }} 
-          script: |                       
-            echo "SSH connection successful!"  # 연결이 성공하면 출력
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            mkdir -p /home/${{ secrets.SERVER_USER }}/kimtg-project/${{ github.event.repository.name }}
+            scp app.tar.gz ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/kimtg-project/${{ github.event.repository.name }}
+            ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} -p ${{ secrets.SERVER_PORT }} "cd /home/${{ secrets.SERVER_USER }}/kimtg-project/${{ github.event.repository.name }} && tar -xzf app.tar.gz"
+
+      - name: Run post-deploy commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            cd /home/${{ secrets.SERVER_USER }}/kimtg-project/${{ github.event.repository.name }}
+            # 필요한 추가 명령어 실행 (예: npm install, npm run build 등)
