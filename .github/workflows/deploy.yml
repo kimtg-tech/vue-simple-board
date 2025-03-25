@@ -1,4 +1,4 @@
-name: Check Server Connection
+name: deploy main
 
 on:
   push:
@@ -24,6 +24,6 @@ jobs:
           source: ./
           target: /home/kimtg-proejct/${{ github.event.repository.name }}
           delete: true
-          args: -avz
+          args: -a -v -z
           script: |           
             echo "SSH connection successful!"  # 연결이 성공하면 출력
