@@ -22,9 +22,10 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           port: ${{ secrets.SERVER_PORT }} 
           script: |                       
-            rm -rf /home/kimtg-proejct/${{ github.event.repository.name }}
-            mkdir /home/kimtg-proejct/${{ github.event.repository.name }}
+            rm -rf /home/kimtg-project/${{ github.event.repository.name }}
+            mkdir /home/kimtg-project/${{ github.event.repository.name }}
             cd /home/kimtg-proejct/${{ github.event.repository.name }}
             git pull origin main
+            npm install
             npm run dev
             echo "SSH connection successful!"  # 연결이 성공하면 출력
