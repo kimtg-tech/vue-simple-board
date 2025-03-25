@@ -1,4 +1,4 @@
-name: deploy main
+name: deploy
 
 on:
   push:
@@ -15,15 +15,22 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Sync source code to server
-        uses: appleboy/rsync-action@latest
+        uses: appleboy/rsync-action@v0.1.5
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_KEY }}
           port: ${{ secrets.SERVER_PORT }}
-          source: ./
-          target: /home/kimtg-proejct/${{ github.event.repository.name }}
-          delete: true
-          args: -avz
-          script: |           
+          source: ./ # 동기화할 파일 경로
+          target: //home/kimtg-proejct/${{ github.event.repository.name }}/ # 동기화할 대상 경로
+          delete: true # 원격 서버에서 삭제된 파일 삭제
+          args: -avz # 압축 및 진행 상황 표시
+      - name: Sync source code to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_KEY }}
+          port: ${{ secrets.SERVER_PORT }} 
+          script: |                       
             echo "SSH connection successful!"  # 연결이 성공하면 출력
