@@ -22,6 +22,5 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            cd /
-            sudo mkdir kimtg-project
+            mkdir /home/${{ secrets.SERVER_USER }}/kimtg-project
             echo "SSH connection successful!"  # 연결이 성공하면 출력
